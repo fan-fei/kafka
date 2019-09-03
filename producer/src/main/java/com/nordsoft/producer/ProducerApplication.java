@@ -3,11 +3,13 @@ package com.nordsoft.producer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @EnableDiscoveryClient
 @SpringBootApplication
+@RestController
 public class ProducerApplication {
 
 
@@ -15,8 +17,8 @@ public class ProducerApplication {
         SpringApplication.run(ProducerApplication.class, args);
     }
 
-    @GetMapping(value = "/producer/hello/{code}")
-    public String updateHallProperty(@PathVariable("code") String code) {
+    @RequestMapping(value = "/producer/hello/{code}")
+    public String get(@PathVariable("code") String code) {
         return "HELLO!";
     }
 }
