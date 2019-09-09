@@ -14,7 +14,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
@@ -27,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 @EnableBinding(Sink.class)
 public class ConsumerApplication {
 
+    public static final String COM_NORDSOFT_STREAMS = "com.nordsoft.streams.";
     @Autowired
     private StringRedisTemplate template;
     @Autowired
@@ -39,7 +39,7 @@ public class ConsumerApplication {
     @GetMapping(value = "/consumer/hello")
     public Map get() {
         Map<String, Map<Object, Object>> dataMap = Maps.newHashMap();
-        Set<String> keys = template.keys("com.nordsoft.streams.*");
+        Set<String> keys = template.keys(COM_NORDSOFT_STREAMS + "*");
         for (String key : keys) {
             Map<Object, Object> hash = template.opsForHash().entries(key);
             dataMap.put(key, hash);
@@ -51,9 +51,9 @@ public class ConsumerApplication {
     public void receive(Object message) {
         String instanceId = registration.getInstanceId();
         String msg = message.toString();
-        template.opsForHash().put("com.nordsoft.streams." + instanceId, "producer", msg);
-        template.opsForHash().put("com.nordsoft.streams." + instanceId, "timestamp", LocalDateTime.now().toString());
-        template.expire("com.nordsoft.streams." + instanceId, 30, TimeUnit.MINUTES);
+        template.opsForHash().put(COM_NORDSOFT_STREAMS + instanceId, "producer", msg);
+        template.opsForHash().put(COM_NORDSOFT_STREAMS + instanceId, "timestamp", LocalDateTime.now().toString());
+        template.expire(COM_NORDSOFT_STREAMS + instanceId, 30, TimeUnit.MINUTES);
         log.info("consumer:{},message:{}", instanceId, msg);
     }
 }
