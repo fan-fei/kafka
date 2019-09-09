@@ -22,7 +22,6 @@ public class ProducerApplication {
     @Autowired
     private Registration registration;
 
-//    @Resource(name="output")
     @Autowired
     private Source source;
 
@@ -35,8 +34,7 @@ public class ProducerApplication {
     public Boolean get() {
         String instanceId = registration.getInstanceId();
         log.info("producer:{},message:{}", instanceId, instanceId);
-        boolean sent = source.output().send(MessageBuilder.withPayload(instanceId).build());
-        return sent;
+        return source.output().send(MessageBuilder.withPayload(instanceId).build());
     }
 
 }

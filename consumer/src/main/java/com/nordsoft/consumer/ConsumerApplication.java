@@ -11,10 +11,11 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.messaging.Message;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -31,26 +32,28 @@ public class ConsumerApplication {
     @Autowired
     private Registration registration;
 
-
     public static void main(String[] args) {
         SpringApplication.run(ConsumerApplication.class, args);
     }
 
     @GetMapping(value = "/consumer/hello")
     public Map get() {
-        Map<String, String> dataMap = Maps.newHashMap();
+        Map<String, Map<Object, Object>> dataMap = Maps.newHashMap();
         Set<String> keys = template.keys("com.nordsoft.streams.*");
         for (String key : keys) {
-            dataMap.put(key, template.opsForValue().get(key));
+            Map<Object, Object> hash = template.opsForHash().entries(key);
+            dataMap.put(key, hash);
         }
         return dataMap;
     }
 
     @StreamListener(Sink.INPUT)
-    public void receive(Message<String> message) {
+    public void receive(Object message) {
         String instanceId = registration.getInstanceId();
-        String msg = message.getPayload();
-        template.opsForValue().set("com.nordsoft.streams." + instanceId, msg, 10, TimeUnit.SECONDS);
+        String msg = message.toString();
+        template.opsForHash().put("com.nordsoft.streams." + instanceId, "producer", msg);
+        template.opsForHash().put("com.nordsoft.streams." + instanceId, "timestamp", LocalDateTime.now().toString());
+        template.expire("com.nordsoft.streams." + instanceId, 30, TimeUnit.MINUTES);
         log.info("consumer:{},message:{}", instanceId, msg);
     }
 }
