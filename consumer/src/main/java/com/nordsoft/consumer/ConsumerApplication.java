@@ -58,7 +58,7 @@ public class ConsumerApplication {
         template.opsForHash().put(key, "producer", msg);
         template.opsForHash().put(key, "msg", msg);
         template.opsForHash().put(key, "timestamp", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        template.expire(key, 30, TimeUnit.MINUTES);
+        template.expire(key, 10, TimeUnit.MINUTES);
         log.info("consumer:{},message:{}", instanceId, msg);
     }
 }
