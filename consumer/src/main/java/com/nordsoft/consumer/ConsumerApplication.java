@@ -56,6 +56,7 @@ public class ConsumerApplication {
         String msg = message.getPayload().toString();
         String key = COM_NORDSOFT_STREAMS + instanceId + "." + IdUtil.createSnowflake(1, 1).nextId();
         template.opsForHash().put(key, "producer", msg);
+        template.opsForHash().put(key, "msg", msg);
         template.opsForHash().put(key, "timestamp", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         template.expire(key, 30, TimeUnit.MINUTES);
         log.info("consumer:{},message:{}", instanceId, msg);
