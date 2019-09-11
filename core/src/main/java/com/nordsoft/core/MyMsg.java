@@ -6,6 +6,6 @@ import lombok.Data;
 public class MyMsg {
 
     private String id;
-    private String instanceId;
+    private String producer;
 }
 

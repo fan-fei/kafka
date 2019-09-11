@@ -41,7 +41,7 @@ public class ConsumerApplication {
 
     @GetMapping(value = "/consumer/hello")
     public Map get() {
-        Map<String, Map<Object, Object>> dataMap = Maps.newHashMap();
+        Map<String, Map<Object, Object>> dataMap = Maps.newTreeMap();
         Set<String> keys = template.keys(COM_NORDSOFT_STREAMS + "*");
         for (String key : keys) {
             Map<Object, Object> hash = template.opsForHash().entries(key);
@@ -54,10 +54,10 @@ public class ConsumerApplication {
     public void receive(Message<?> message) {
         String instanceId = registration.getInstanceId();
         String msg = message.getPayload().toString();
-        String key = COM_NORDSOFT_STREAMS + instanceId + "." + IdUtil.createSnowflake(1, 1).nextId();
-        template.opsForHash().put(key, "producer", msg);
-        template.opsForHash().put(key, "msg", msg);
+        String key = COM_NORDSOFT_STREAMS + IdUtil.createSnowflake(0, 0).nextId();
+        template.opsForHash().put(key, "consumer", instanceId);
         template.opsForHash().put(key, "timestamp", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        template.opsForHash().put(key, "msg", msg);
         template.expire(key, 10, TimeUnit.MINUTES);
         log.info("consumer:{},message:{}", instanceId, msg);
     }

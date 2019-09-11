@@ -37,7 +37,7 @@ public class ProducerApplication {
     public Boolean get(@PathVariable("id") String id) {
         MyMsg myMsg = new MyMsg();
         myMsg.setId(id);
-        myMsg.setInstanceId(registration.getInstanceId());
+        myMsg.setProducer(registration.getInstanceId());
         log.info("producer:{},message:{}", registration.getInstanceId(), JSONUtil.toJsonStr(myMsg));
         return source.output().send(MessageBuilder.withPayload(myMsg).build());
     }
