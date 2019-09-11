@@ -54,7 +54,7 @@ public class ConsumerApplication {
     public void receive(Message<?> message) {
         String instanceId = registration.getInstanceId();
         String msg = message.getPayload().toString();
-        String key = COM_NORDSOFT_STREAMS + IdUtil.createSnowflake(0, 0).nextId();
+        String key = COM_NORDSOFT_STREAMS + IdUtil.getSnowflake(0, 0).nextId();
         template.opsForHash().put(key, "consumer", instanceId);
         template.opsForHash().put(key, "timestamp", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         template.opsForHash().put(key, "msg", msg);
