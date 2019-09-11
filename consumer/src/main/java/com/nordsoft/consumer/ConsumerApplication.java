@@ -29,7 +29,8 @@ import java.util.concurrent.TimeUnit;
 @EnableBinding(Sink.class)
 public class ConsumerApplication {
 
-    public static final String COM_NORDSOFT_STREAMS = "com.nordsoft.streams.";
+    public static final String COM_NORDSOFT_STREAMS_LOG = "com.nordsoft.streams.log.";
+    public static final String COM_NORDSOFT_STREAMS_INCR = "com.nordsoft.streams.incr";
     @Autowired
     private StringRedisTemplate template;
     @Autowired
@@ -42,7 +43,7 @@ public class ConsumerApplication {
     @GetMapping(value = "/consumer/hello")
     public Map get() {
         Map<String, Map<Object, Object>> dataMap = Maps.newTreeMap();
-        Set<String> keys = template.keys(COM_NORDSOFT_STREAMS + "*");
+        Set<String> keys = template.keys(COM_NORDSOFT_STREAMS_LOG + "*");
         for (String key : keys) {
             Map<Object, Object> hash = template.opsForHash().entries(key);
             dataMap.put(key, hash);
@@ -54,7 +55,7 @@ public class ConsumerApplication {
     public void receive(Message<?> message) {
         String instanceId = registration.getInstanceId();
         String msg = message.getPayload().toString();
-        String key = COM_NORDSOFT_STREAMS + IdUtil.getSnowflake(0, 0).nextId();
+        String key = COM_NORDSOFT_STREAMS_LOG + IdUtil.getSnowflake(Integer.valueOf(registration.getHost().replaceAll("\\.", "")) % 32, registration.getPort() % 32).nextId();
         template.opsForHash().put(key, "consumer", instanceId);
         template.opsForHash().put(key, "timestamp", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         template.opsForHash().put(key, "msg", msg);
