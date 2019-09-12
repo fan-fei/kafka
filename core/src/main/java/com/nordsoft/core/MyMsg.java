@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class MyMsg {
 
-    private String id;
+    private Integer id;
     private String producer;
 }
 

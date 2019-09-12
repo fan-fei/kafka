@@ -34,7 +34,7 @@ public class ProducerApplication {
     }
 
     @GetMapping(value = "/producer/{id}")
-    public Boolean get(@PathVariable("id") String id) {
+    public Boolean get(@PathVariable("id") Integer id) {
         MyMsg myMsg = new MyMsg();
         myMsg.setId(id);
         myMsg.setProducer(registration.getInstanceId());
