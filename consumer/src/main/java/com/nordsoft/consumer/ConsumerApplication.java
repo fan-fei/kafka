@@ -40,7 +40,7 @@ public class ConsumerApplication {
         SpringApplication.run(ConsumerApplication.class, args);
     }
 
-    @GetMapping(value = "/consumer/hello")
+    @GetMapping(value = "/kafka/consumer/info")
     public Map get() {
         Map<String, Map<Object, Object>> dataMap = Maps.newTreeMap();
         Set<String> keys = template.keys(COM_NORDSOFT_STREAMS_LOG + "*");

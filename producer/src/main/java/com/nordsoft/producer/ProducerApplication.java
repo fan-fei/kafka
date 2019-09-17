@@ -33,7 +33,7 @@ public class ProducerApplication {
         SpringApplication.run(ProducerApplication.class, args);
     }
 
-    @GetMapping(value = "/producer/{id}")
+    @GetMapping(value = "/kafka/producer/{id}")
     public Boolean get(@PathVariable("id") Integer id) {
         MyMsg myMsg = new MyMsg();
         myMsg.setId(id);
