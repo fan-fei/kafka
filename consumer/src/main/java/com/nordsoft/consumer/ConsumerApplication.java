@@ -41,7 +41,7 @@ public class ConsumerApplication {
     }
 
     @GetMapping(value = "/kafka/consumer/info")
-    public Map get() {
+    public Map info() {
         Map<String, Map<Object, Object>> dataMap = Maps.newTreeMap();
         Set<String> keys = template.keys(COM_NORDSOFT_STREAMS_LOG + "*");
         for (String key : keys) {
@@ -49,6 +49,13 @@ public class ConsumerApplication {
             dataMap.put(key, hash);
         }
         return dataMap;
+    }
+
+    @GetMapping(value = "/kafka/consumer/clear")
+    public Boolean clear() {
+        Set<String> keys = template.keys(COM_NORDSOFT_STREAMS_LOG + "*");
+        keys.forEach(key -> template.delete(key));
+        return true;
     }
 
     @StreamListener(Sink.INPUT)
