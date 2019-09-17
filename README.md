@@ -24,4 +24,5 @@ redis-cli keys "com.nordsoft.streams.log*" |xargs redis-cli del
 
 ## shell
 nohup /usr/local/services/kafka_2.12-2.3.0/bin/zookeeper-server-start.sh /usr/local/services/kafka_2.12-2.3.0/config/zookeeper.properties &
+
 nohup /usr/local/services/kafka_2.12-2.3.0/bin/kafka-server-start.sh /usr/local/services/kafka_2.12-2.3.0/config/server.properties &
