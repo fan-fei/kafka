@@ -1,6 +1,13 @@
 # kafka
 a sample about spring cloud stream on kafka.
 
+## shell
+nohup consul/consul agent -dev -client=0.0.0.0 &
+
+nohup kafka_2.12-2.3.0/bin/zookeeper-server-start.sh kafka_2.12-2.3.0/config/zookeeper.properties &
+
+nohup kafka_2.12-2.3.0/bin/kafka-server-start.sh kafka_2.12-2.3.0/config/server.properties &
+
 ## start command
 nohup java -jar gateway-0.0.1-SNAPSHOT.jar --server.port=5000 --spring.profiles.active=prod &
 
@@ -22,9 +29,3 @@ nohup java -jar consumer-0.0.1-SNAPSHOT.jar --server.port=5203 --spring.cloud.st
 ## redis clear command
 redis-cli keys "com.nordsoft.streams.log*" |xargs redis-cli del
 
-## shell
-nohup consul/consul agent -dev -client=0.0.0.0 &
-
-nohup kafka_2.12-2.3.0/bin/zookeeper-server-start.sh kafka_2.12-2.3.0/config/zookeeper.properties &
-
-nohup kafka_2.12-2.3.0/bin/kafka-server-start.sh kafka_2.12-2.3.0/config/server.properties &
