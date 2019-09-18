@@ -58,6 +58,11 @@ public class ConsumerApplication {
         return true;
     }
 
+    @GetMapping("/kafka/consumer/registration")
+    public Registration registration() {
+        return this.registration;
+    }
+
     @StreamListener(Sink.INPUT)
     public void receive(Message<?> message) {
         String instanceId = registration.getInstanceId();
